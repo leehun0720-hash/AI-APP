@@ -1,0 +1,5 @@
+{
+  "name": "AI Smart Invoice",
+  "description": "Generate professional invoice emails instantly using Gemini AI. Features multilingual support and revenue visualization.",
+  "requestFramePermissions": []
+}
