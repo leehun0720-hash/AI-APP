@@ -1,31 +1,335 @@
 <!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>AI Smart Invoice</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>약물 안전 지킴이</title>
     <style>
-      body {
-        font-family: 'Inter', sans-serif;
-        background-color: #f8fafc;
-      }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .container {
+            max-width: 500px;
+            width: 100%;
+        }
+
+        .card {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 10px;
+            font-size: 28px;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #666;
+            font-size: 14px;
+            margin-bottom: 30px;
+        }
+
+        .input-group {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        select {
+            flex: 1;
+            padding: 12px 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 16px;
+            color: #333;
+            background-color: #f8f9fa;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        select:focus {
+            outline: none;
+            border-color: #667eea;
+            background-color: white;
+        }
+
+        button {
+            padding: 12px 25px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        button:active {
+            transform: translateY(0);
+        }
+
+        .medicine-list {
+            margin-top: 20px;
+        }
+
+        .medicine-list h2 {
+            font-size: 18px;
+            color: #333;
+            margin-bottom: 15px;
+        }
+
+        .medicine-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 15px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            margin-bottom: 10px;
+            transition: all 0.3s;
+        }
+
+        .medicine-item:hover {
+            background: #e9ecef;
+            transform: translateX(5px);
+        }
+
+        .medicine-name {
+            font-size: 16px;
+            color: #333;
+            font-weight: 500;
+        }
+
+        .remove-btn {
+            padding: 5px 12px;
+            font-size: 14px;
+            background: #ff6b6b;
+            border-radius: 6px;
+        }
+
+        .remove-btn:hover {
+            background: #ff5252;
+        }
+
+        .warning-box {
+            background: #fff5f5;
+            border: 2px solid #ff6b6b;
+            border-radius: 10px;
+            padding: 15px;
+            margin-top: 20px;
+            animation: shake 0.5s;
+        }
+
+        .warning-title {
+            color: #ff6b6b;
+            font-weight: bold;
+            font-size: 18px;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .warning-message {
+            color: #c92a2a;
+            font-size: 14px;
+            line-height: 1.6;
+            margin-bottom: 8px;
+        }
+
+        .empty-state {
+            text-align: center;
+            color: #999;
+            padding: 30px;
+            font-size: 14px;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-10px); }
+            75% { transform: translateX(10px); }
+        }
+
+        @media (max-width: 600px) {
+            .card {
+                padding: 20px;
+            }
+
+            h1 {
+                font-size: 24px;
+            }
+
+            .input-group {
+                flex-direction: column;
+            }
+
+            button {
+                width: 100%;
+            }
+        }
     </style>
-  <script type="importmap">
-{
-  "imports": {
-    "@google/genai": "https://esm.sh/@google/genai@^1.35.0",
-    "recharts": "https://esm.sh/recharts@^3.6.0",
-    "lucide-react": "https://esm.sh/lucide-react@^0.562.0",
-    "react/": "https://esm.sh/react@^19.2.3/",
-    "react": "https://esm.sh/react@^19.2.3",
-    "react-dom/": "https://esm.sh/react-dom@^19.2.3/"
-  }
-}
-</script>
 </head>
-  <body>
-    <div id="root"></div>
-  </body>
+<body>
+    <div class="container">
+        <div class="card">
+            <h1>💊 약물 안전 지킴이</h1>
+            <p class="subtitle">복용 중인 약물의 상호작용을 확인하세요</p>
+
+            <div class="input-group">
+                <select id="medicineSelect">
+                    <option value="">약을 선택하세요</option>
+                </select>
+                <button onclick="addMedicine()">추가</button>
+            </div>
+
+            <div class="medicine-list">
+                <h2>복용 약물 목록</h2>
+                <div id="medicineListContainer">
+                    <div class="empty-state">아직 추가된 약이 없습니다</div>
+                </div>
+            </div>
+
+            <div id="warningContainer"></div>
+        </div>
+    </div>
+
+    <script>
+        // 약물 데이터
+        const medicines = [
+            { id: 1, name: '고혈압약(코자정)', category: 'hypertension' },
+            { id: 2, name: '고지혈증약(스타딘)', category: 'cholesterol' },
+            { id: 3, name: '아스피린', category: 'aspirin' },
+            { id: 4, name: '오메가3', category: 'omega3' },
+            { id: 5, name: '마그네슘', category: 'magnesium' },
+            { id: 6, name: '비타민C', category: 'vitaminc' },
+            { id: 7, name: '칼륨보충제', category: 'potassium' }
+        ];
+
+        // 상호작용 규칙
+        const interactionRules = [
+            {
+                combination: ['hypertension', 'potassium'],
+                warning: '⚠️ 고칼륨혈증 위험! 심장에 무리가 갈 수 있습니다.'
+            },
+            {
+                combination: ['aspirin', 'omega3'],
+                warning: '⚠️ 출혈 위험 증가! 지혈이 잘 안 될 수 있습니다.'
+            }
+        ];
+
+        // 현재 선택된 약물 목록
+        let selectedMedicines = [];
+
+        // 초기화
+        function init() {
+            const select = document.getElementById('medicineSelect');
+            medicines.forEach(med => {
+                const option = document.createElement('option');
+                option.value = med.id;
+                option.textContent = med.name;
+                select.appendChild(option);
+            });
+        }
+
+        // 약물 추가
+        function addMedicine() {
+            const select = document.getElementById('medicineSelect');
+            const medicineId = parseInt(select.value);
+
+            if (!medicineId) {
+                alert('약을 선택해주세요!');
+                return;
+            }
+
+            const medicine = medicines.find(m => m.id === medicineId);
+
+            // 중복 체크
+            if (selectedMedicines.find(m => m.id === medicineId)) {
+                alert('이미 추가된 약입니다!');
+                return;
+            }
+
+            selectedMedicines.push(medicine);
+            select.value = '';
+            updateMedicineList();
+            checkInteractions();
+        }
+
+        // 약물 제거
+        function removeMedicine(id) {
+            selectedMedicines = selectedMedicines.filter(m => m.id !== id);
+            updateMedicineList();
+            checkInteractions();
+        }
+
+        // 약물 목록 업데이트
+        function updateMedicineList() {
+            const container = document.getElementById('medicineListContainer');
+
+            if (selectedMedicines.length === 0) {
+                container.innerHTML = '<div class="empty-state">아직 추가된 약이 없습니다</div>';
+                return;
+            }
+
+            container.innerHTML = selectedMedicines.map(med => `
+                <div class="medicine-item">
+                    <span class="medicine-name">${med.name}</span>
+                    <button class="remove-btn" onclick="removeMedicine(${med.id})">삭제</button>
+                </div>
+            `).join('');
+        }
+
+        // 상호작용 체크
+        function checkInteractions() {
+            const warningContainer = document.getElementById('warningContainer');
+            const categories = selectedMedicines.map(m => m.category);
+            const warnings = [];
+
+            interactionRules.forEach(rule => {
+                const hasAllCategories = rule.combination.every(cat => categories.includes(cat));
+                if (hasAllCategories) {
+                    warnings.push(rule.warning);
+                }
+            });
+
+            if (warnings.length > 0) {
+                warningContainer.innerHTML = `
+                    <div class="warning-box">
+                        <div class="warning-title">🚨 위험한 약물 조합 발견!</div>
+                        ${warnings.map(w => `<div class="warning-message">${w}</div>`).join('')}
+                    </div>
+                `;
+            } else {
+                warningContainer.innerHTML = '';
+            }
+        }
+
+        // 페이지 로드 시 초기화
+        init();
+    </script>
+</body>
 </html>
