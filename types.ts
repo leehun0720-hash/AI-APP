@@ -6,12 +6,21 @@ export enum Language {
   FRENCH = 'French'
 }
 
+export interface InvoiceItem {
+  id: string;
+  name: string;
+  spec: string;
+  quantity: number;
+  unitPrice: number;
+  remarks: string;
+}
+
 export interface InvoiceData {
   clientName: string;
-  itemDescription: string;
-  amount: number;
+  items: InvoiceItem[];
   currency: string;
-  dueDate: string;
+  dueDate: string;      // Payment Due Date
+  deliveryDate: string; // Delivery Deadline
   language: Language;
 }
 

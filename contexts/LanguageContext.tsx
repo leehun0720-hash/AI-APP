@@ -24,7 +24,8 @@ export const dictionary: Dictionary = {
   description: { en: "Description of Service", ko: "청구 내역" },
   amount: { en: "Amount", ko: "금액" },
   currency: { en: "Currency", ko: "통화" },
-  dueDate: { en: "Due Date", ko: "납기일" },
+  dueDate: { en: "Payment Due Date", ko: "입금 기한" },
+  deliveryDate: { en: "Delivery Deadline", ko: "납품 기한" },
   targetLanguage: { en: "Email Language", ko: "이메일 언어" },
   generateButton: { en: "Generate Invoice Email", ko: "인보이스 이메일 생성" },
   generating: { en: "Generating with Gemini...", ko: "Gemini가 생성 중..." },
@@ -38,7 +39,18 @@ export const dictionary: Dictionary = {
   placeholderDesc: { en: "e.g. Q1 Web Development", ko: "예: 1분기 웹 개발비" },
   alertFill: { en: "Please fill in all required fields.", ko: "모든 필수 항목을 입력해 주세요." },
   alertFail: { en: "Failed to generate email. Please check your connection.", ko: "이메일 생성에 실패했습니다. 연결을 확인해 주세요." },
-  footer: { en: "AI Smart Invoice. Powered by Google Gemini.", ko: "AI 스마트 인보이스. Google Gemini 기반 서비스." }
+  footer: { en: "AI Smart Invoice. Powered by Google Gemini.", ko: "AI 스마트 인보이스. Google Gemini 기반 서비스." },
+  
+  // New Item Fields
+  itemsTitle: { en: "Items", ko: "품목 리스트" },
+  productName: { en: "Product Name", ko: "제품명" },
+  spec: { en: "Spec", ko: "규격/스펙" },
+  quantity: { en: "Qty", ko: "수량" },
+  unitPrice: { en: "Unit Price", ko: "단가" },
+  total: { en: "Total", ko: "금액" },
+  remarks: { en: "Remarks", ko: "비고" },
+  addItem: { en: "Add Item", ko: "품목 추가" },
+  totalAmount: { en: "Total Amount", ko: "총 합계" }
 };
 
 interface LanguageContextType {
